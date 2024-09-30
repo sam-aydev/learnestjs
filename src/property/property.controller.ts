@@ -6,8 +6,10 @@ import {
   Param,
   ParseBoolPipe,
   ParseIntPipe,
+  Patch,
   Post,
   Query,
+  ValidationPipe,
 } from '@nestjs/common';
 import { CreatePropertyDto } from './dto/createProperty.dto';
 
@@ -29,7 +31,13 @@ export class PropertyController {
 
   @Post()
   @HttpCode(202)
-  create(@Body() name: CreatePropertyDto) {
-    return name;
+  public create(@Body() createPropertyDto: CreatePropertyDto) {
+    return 'you success';
+  }
+
+  @Patch()
+  @HttpCode(202)
+  public patchUser(@Body() body) {
+    return 'patched';
   }
 }
