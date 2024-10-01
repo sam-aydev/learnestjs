@@ -12,8 +12,10 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { CreatePropertyDto } from './dto/createProperty.dto';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('property')
+@ApiTags('property')
 export class PropertyController {
   @Get()
   findAll() {
