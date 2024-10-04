@@ -4,19 +4,19 @@ import { CreateUserDto } from './dto/createUser.dto';
 
 @Controller('users')
 export class UsersController {
-  private readonly userService: UserService;
-  // @Get()
-  // findAll() {
-  //   return this.userService.findAll;
+  constructor(private readonly userService: UserService) {}
+  @Get()
+  findAll() {
+    return 'users';
+  }
+
+  // @Post()
+  // public tryOut(@Body() createUserDto: CreateUserDto) {
+  //   return createUserDto;
   // }
 
   @Post()
-  public tryOut(@Body() createUserDto: CreateUserDto) {
-    return createUserDto;
-  }
-
-  @Post('/:id?')
-  public createUsers(@Body() createUserDto) {
+  public createUsers(@Body() createUserDto: CreateUserDto) {
     return this.userService.createUser(createUserDto);
   }
 }

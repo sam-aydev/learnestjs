@@ -33,7 +33,7 @@ export class PropertyController {
 
   @Post()
   @HttpCode(202)
-  public create(@Body() createPropertyDto: CreatePropertyDto) {
+  public createProperty(@Body() createPropertyDto: CreatePropertyDto) {
     return 'you success';
   }
 

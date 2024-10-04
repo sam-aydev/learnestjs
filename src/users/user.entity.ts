@@ -17,7 +17,6 @@ export class User {
     length: 70,
     nullable: true,
   })
-  @Column()
   lastName: string;
 
   @Column({
@@ -25,14 +24,12 @@ export class User {
     length: 70,
     nullable: false,
   })
-  @Column()
   email: string;
 
   @Column({
     type: 'varchar',
-    length: 70,
+    length: 12,
     nullable: false,
   })
-  @Column()
   password: string;
 }

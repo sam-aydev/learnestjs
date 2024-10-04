@@ -12,7 +12,7 @@ export class CreateUserDto {
   @MinLength(4, {
     message: 'First name should not be less than 4 characters',
   })
-  @MaxLength(10, {
+  @MaxLength(70, {
     message: 'First name should not be less than 10 characters',
   })
   firstName: string;
@@ -22,10 +22,10 @@ export class CreateUserDto {
   @MinLength(4, {
     message: 'Last name should not be less than 4 characters',
   })
-  @MaxLength(10, {
+  @MaxLength(70, {
     message: 'Last name should not be less than 10 characters',
   })
-  lastName: string;
+  lastName?: string;
 
   @IsString()
   @IsNotEmpty()
@@ -35,10 +35,10 @@ export class CreateUserDto {
   @IsString()
   @IsNotEmpty()
   @MinLength(6, {
-    message: 'First name should not be less than 6 characters',
+    message: 'Password should not be less than 6 characters',
   })
   @MaxLength(12, {
-    message: 'First name should not be less than 12 characters',
+    message: 'Password should not be less than 12 characters',
   })
   password: string;
 }
