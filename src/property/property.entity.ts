@@ -1,4 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Tag } from 'src/tags/tags.entity';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class Property {
@@ -24,5 +31,12 @@ export class Property {
     length: 34,
     nullable: false,
   })
-  featured_img: string;
+  propertyStatus: string;
+
+  @OneToOne(() => Tag)
+  @JoinColumn()
+  propertyTags?: Tag;
+
+  @Column()
+  metaOptions: string;
 }

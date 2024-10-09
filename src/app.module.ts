@@ -5,6 +5,7 @@ import { PropertyModule } from './property/property.module';
 import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './users/user.entity';
+import { TagsModule } from './tags/tags.module';
 
 @Module({
   imports: [
@@ -16,7 +17,8 @@ import { User } from './users/user.entity';
       useFactory: () => ({
         type: 'postgres',
         synchronize: true,
-        entities: [User],
+        autoLoadEntities: true,
+        // entities: [User],
         port: 5432,
         username: 'postgres',
         password: '12345',
@@ -24,6 +26,7 @@ import { User } from './users/user.entity';
         database: 'nestjslearn',
       }),
     }),
+    TagsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
