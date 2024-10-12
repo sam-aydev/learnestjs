@@ -10,8 +10,8 @@ import {
 } from 'class-validator';
 import { propertyType } from '../enums/propertyType.enum';
 import { propertyStatus } from '../enums/propertyStatus.enum';
-import { CreatePropertyMetaOptions } from './createproperty-metaoptions.dto';
 import { Type } from 'class-transformer';
+import { MetaOptionDto } from 'src/metaoptions/dto/metaoption.dto';
 
 export class CreatePropertyDto {
   @ApiProperty({
@@ -19,7 +19,7 @@ export class CreatePropertyDto {
   })
   @IsString()
   @IsNotEmpty()
-  name: string;
+  title: string;
 
   @ApiProperty()
   @IsString()
@@ -28,7 +28,7 @@ export class CreatePropertyDto {
   @IsInt()
   @ApiProperty()
   @IsOptional()
-  area: number;
+  area?: number;
 
   @IsEnum(propertyType)
   @ApiProperty({
@@ -37,18 +37,27 @@ export class CreatePropertyDto {
   })
   propertyType: propertyType;
 
+  @IsEnum(propertyStatus)
   propertyStatus: propertyStatus;
 
   @IsArray()
   @IsString({ each: true })
+  @IsOptional()
   @ApiPropertyOptional({
     description: 'other tags of the property',
   })
   propertyTags?: string[];
 
   @IsOptional()
-  @IsArray()
   @ValidateNested({ each: true })
-  @Type(() => CreatePropertyMetaOptions)
-  metaOptions: CreatePropertyMetaOptions[];
+  @Type(() => MetaOptionDto)
+  metaOptions: MetaOptionDto | null;
+
+  @ApiProperty({
+    type: 'integer',
+    required: true,
+  })
+  @IsInt()
+  @IsNotEmpty()
+  authorId: number;
 }

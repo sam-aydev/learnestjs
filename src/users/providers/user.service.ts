@@ -11,6 +11,7 @@ export class UserService {
     @InjectRepository(User)
     private userRepository: Repository<User>,
   ) {}
+
   public async createUser(createUserDto: CreateUserDto) {
     const existingUser = await this.userRepository.findOne({
       where: {
@@ -21,5 +22,9 @@ export class UserService {
     let newUser = this.userRepository.create(createUserDto);
     newUser = await this.userRepository.save(newUser);
     return newUser;
+  }
+
+  public async findUserById(id: number) {
+    return await this.userRepository.findOneBy({ id });
   }
 }

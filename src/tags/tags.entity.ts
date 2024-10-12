@@ -1,4 +1,12 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Property } from 'src/property/property.entity';
+import {
+  Column,
+  CreateDateColumn,
+  DeleteDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
 @Entity()
 export class Tag {
@@ -9,29 +17,30 @@ export class Tag {
     type: 'varchar',
     nullable: false,
     length: 40,
+    unique: true,
   })
   label: string;
 
   @Column({
     type: 'varchar',
-    nullable: false,
-    length: 40,
+    nullable: true,
+    length: 512,
   })
-  slug: string;
+  slug?: string;
+
+  @Column({
+    type: 'varchar',
+    nullable: true,
+    length: 512,
+  })
+  description?: string;
 
   @Column({
     type: 'varchar',
     nullable: true,
     length: 40,
   })
-  description?: string;
-
-  @Column({
-    type: 'varchar',
-    nullable: false,
-    length: 40,
-  })
-  featuredImgUrl: string;
+  featuredImgUrl?: string;
 
   @Column({
     type: 'varchar',
@@ -43,9 +52,9 @@ export class Tag {
   @CreateDateColumn()
   createdDate: Date;
 
-
   @UpdateDateColumn()
-  updatedDate: Date
+  updatedDate: Date;
 
-  
+  @DeleteDateColumn()
+  deletedAt: Date;
 }

@@ -1,8 +1,11 @@
+import { MetaOption } from 'src/metaoptions/meta-option.entity';
 import { Tag } from 'src/tags/tags.entity';
+import { User } from 'src/users/user.entity';
 import {
   Column,
   Entity,
   JoinColumn,
+  ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -21,22 +24,43 @@ export class Property {
 
   @Column({
     type: 'varchar',
-    length: 34,
+    length: 400,
     nullable: false,
   })
-  slug: string;
+  description: string;
+
+  @Column({
+    type: 'numeric',
+    nullable: true,
+  })
+  area: number;
 
   @Column({
     type: 'varchar',
-    length: 34,
     nullable: false,
   })
   propertyStatus: string;
 
-  @OneToOne(() => Tag)
-  @JoinColumn()
-  propertyTags?: Tag;
+  @Column({
+    type: 'varchar',
+    nullable: false,
+  })
+  propertyType: string;
 
-  @Column()
-  metaOptions: string;
+  @Column({
+    type: 'varchar',
+    nullable: true,
+  })
+  propertyTags?: string[];
+
+  @OneToOne(() => MetaOption, (metaOption) => metaOption.property, {
+    cascade: true,
+    eager: true,
+  })
+  metaOptions: MetaOption;
+
+  @ManyToOne(() => User, (user) => user.property, {
+    eager: true,
+  })
+  author: User;
 }

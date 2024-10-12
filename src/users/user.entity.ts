@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Property } from 'src/property/property.entity';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class User {
@@ -32,4 +33,7 @@ export class User {
     nullable: false,
   })
   password: string;
+
+  @OneToMany(() => Property, (property) => property.author)
+  property: Property[];
 }

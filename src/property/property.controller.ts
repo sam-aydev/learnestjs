@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   Param,
@@ -12,34 +13,44 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { CreatePropertyDto } from './dto/createProperty.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { PropertyService } from './property.service';
 
 @Controller('property')
 @ApiTags('property')
 export class PropertyController {
+  constructor(private readonly propertyService: PropertyService) {}
   @Get()
-  findAll() {
-    return 'All properties';
+  public findAll() {
+    return this.propertyService.findAll();
   }
 
-  @Get(':id')
-  findOne(
-    @Param('id', ParseIntPipe) id: string,
-    @Query('sort', ParseBoolPipe) sort,
-  ) {
-    console.log(typeof sort);
-    return `${id} - ${sort}`;
-  }
-
+  @ApiResponse({
+    status: 201,
+    description: 'You get a 201 response if your property is created!',
+  })
   @Post()
   @HttpCode(202)
   public createProperty(@Body() createPropertyDto: CreatePropertyDto) {
-    return 'you success';
+    return this.propertyService.create(createPropertyDto);
   }
 
-  @Patch()
-  @HttpCode(202)
-  public patchUser(@Body() body) {
-    return 'patched';
+  @Delete(':id')
+  public deleteProperty(@Param('id', ParseIntPipe) id: number) {
+    return this.propertyService.delete(id);
   }
+  // @Get(':id')
+  // findOne(
+  //   @Param('id', ParseIntPipe) id: string,
+  //   @Query('sort', ParseBoolPipe) sort,
+  // ) {
+  //   console.log(typeof sort);
+  //   return `${id} - ${sort}`;
+  // }
+
+  // @Patch()
+  // @HttpCode(202)
+  // public patchUser(@Body() body) {
+  //   return 'patched';
+  // }
 }
