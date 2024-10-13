@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Property } from './property.entity';
 import { MetaOption } from 'src/metaoptions/meta-option.entity';
 import { UsersModule } from 'src/users/users.module';
+import { TagsModule } from 'src/tags/tags.module';
 
 @Module({
   providers: [PropertyService],
@@ -12,6 +13,7 @@ import { UsersModule } from 'src/users/users.module';
   exports: [PropertyService],
   imports: [
     forwardRef(() => UsersModule),
+    TagsModule,
     TypeOrmModule.forFeature([Property, MetaOption]),
   ],
 })

@@ -5,6 +5,8 @@ import {
   Column,
   Entity,
   JoinColumn,
+  JoinTable,
+  ManyToMany,
   ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -47,11 +49,11 @@ export class Property {
   })
   propertyType: string;
 
-  @Column({
-    type: 'varchar',
-    nullable: true,
-  })
-  propertyTags?: string[];
+  // @Column({
+  //   type: 'array',
+  //   nullable: true,
+  // })
+  // propertyTags?: number[];
 
   @OneToOne(() => MetaOption, (metaOption) => metaOption.property, {
     cascade: true,
@@ -63,4 +65,8 @@ export class Property {
     eager: true,
   })
   author: User;
+
+  @ManyToMany(() => Tag, (tags) => tags.property, { eager: true })
+  @JoinTable()
+  tags?: Tag[];
 }

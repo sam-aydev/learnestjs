@@ -41,12 +41,12 @@ export class CreatePropertyDto {
   propertyStatus: propertyStatus;
 
   @IsArray()
-  @IsString({ each: true })
+  @IsInt({ each: true })
   @IsOptional()
   @ApiPropertyOptional({
-    description: 'other tags of the property',
+    description: 'array of id of tags',
   })
-  propertyTags?: string[];
+  tags?: number[];
 
   @IsOptional()
   @ValidateNested({ each: true })

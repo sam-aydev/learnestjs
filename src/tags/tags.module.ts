@@ -9,5 +9,6 @@ import { Property } from 'src/property/property.entity';
   controllers: [TagsController],
   imports: [TypeOrmModule.forFeature([Tag, Property])],
   providers: [TagsService],
+  exports: [TagsService],
 })
 export class TagsModule {}

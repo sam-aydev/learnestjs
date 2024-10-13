@@ -15,6 +15,7 @@ import {
 import { CreatePropertyDto } from './dto/createProperty.dto';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { PropertyService } from './property.service';
+import { PatchPropertyDto } from './dto/patchProperty.dto';
 
 @Controller('property')
 @ApiTags('property')
@@ -39,6 +40,13 @@ export class PropertyController {
   public deleteProperty(@Param('id', ParseIntPipe) id: number) {
     return this.propertyService.delete(id);
   }
+
+  @Patch()
+  @HttpCode(202)
+  public updateProperty(@Body() updatePropertyDto: PatchPropertyDto) {
+    return this.propertyService.update(updatePropertyDto);
+  }
+
   // @Get(':id')
   // findOne(
   //   @Param('id', ParseIntPipe) id: string,
@@ -46,11 +54,5 @@ export class PropertyController {
   // ) {
   //   console.log(typeof sort);
   //   return `${id} - ${sort}`;
-  // }
-
-  // @Patch()
-  // @HttpCode(202)
-  // public patchUser(@Body() body) {
-  //   return 'patched';
   // }
 }

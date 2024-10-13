@@ -4,6 +4,7 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  ManyToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -57,4 +58,9 @@ export class Tag {
 
   @DeleteDateColumn()
   deletedAt: Date;
+
+  @ManyToMany(() => Property, (property) => property.tags, {
+    onDelete: 'CASCADE',
+  })
+  property: Property[];
 }
