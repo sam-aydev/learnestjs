@@ -7,6 +7,7 @@ import { Repository } from 'typeorm';
 import { MetaOption } from 'src/metaoptions/meta-option.entity';
 import { TagsService } from 'src/tags/tags.service';
 import { PatchPropertyDto } from './dto/patchProperty.dto';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class PropertyService {
@@ -16,10 +17,12 @@ export class PropertyService {
     private readonly tagsService: TagsService,
 
     @InjectRepository(Property)
-    private readonly propRepository: Repository<Property>,
+    private propRepository: Repository<Property>,
 
     @InjectRepository(MetaOption)
-    public readonly metaOptionRepo: Repository<MetaOption>,
+    public metaOptionRepo: Repository<MetaOption>,
+
+    public readonly configService: ConfigService,
   ) {}
 
   public async create(@Body() createPropDto: CreatePropertyDto) {
@@ -36,6 +39,8 @@ export class PropertyService {
   }
 
   public async findAll() {
+    const enviroment = this.configService.get<string>('S3_BUCKET');
+    console.log(enviroment);
     return await this.propRepository.find();
   }
 

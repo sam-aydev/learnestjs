@@ -7,24 +7,30 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './users/user.entity';
 import { TagsModule } from './tags/tags.module';
 import { MetaoptionsModule } from './metaoptions/metaoptions.module';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
+const ENV = process.env.NODE_ENV;
 @Module({
   imports: [
     PropertyModule,
     UsersModule,
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: !ENV ? '.env' : `.env.${ENV}`,
+    }),
     TypeOrmModule.forRootAsync({
-      imports: [],
-      inject: [],
-      useFactory: () => ({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
         type: 'postgres',
         synchronize: true,
         autoLoadEntities: true,
         // entities: [User],
-        port: 5432,
+        port: +configService.get('DATABASE_PORT'),
         username: 'postgres',
         password: '12345',
-        host: 'localhost',
-        database: 'nestjslearn',
+        host: configService.get('DATABASE_HOST'),
+        database: configService.get('DATABASE_NAME'),
       }),
     }),
     TagsModule,
