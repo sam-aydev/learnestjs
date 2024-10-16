@@ -1,4 +1,9 @@
-import { Body, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Injectable,
+  RequestTimeoutException,
+} from '@nestjs/common';
 import { UserService } from 'src/users/providers/user.service';
 import { CreatePropertyDto } from './dto/createProperty.dto';
 import { Property } from './property.entity';
@@ -52,10 +57,27 @@ export class PropertyService {
 
   public async update(updateDto: PatchPropertyDto) {
     // Find the tags
-    let tags = await this.tagsService.findTags(updateDto.tags);
+    let tags = undefined;
+    try {
+      tags = await this.tagsService.findTags(updateDto.tags);
+    } catch (error) {
+      throw new RequestTimeoutException('Unable to connect to server', {
+        description: 'connection timeout',
+      });
+    }
 
+    if (!tags) throw new BadRequestException('no tags found');
     // Find the post
-    let property = await this.propRepository.findOneBy({ id: updateDto.id });
+    let property = undefined;
+    try {
+      property = await this.propRepository.findOneBy({ id: updateDto.id });
+    } catch (error) {
+      throw new RequestTimeoutException('Unable to connect to server', {
+        description: 'connection timeout',
+      });
+    }
+
+    if (!property) throw new BadRequestException('No property data found!');
 
     // Update the properties
     property.title = updateDto.title ?? property.title;
@@ -68,7 +90,17 @@ export class PropertyService {
     // Assign the new tags
     property.tags = tags;
 
-    // Save the post and return
-    return await this.propRepository.save(property);
+    // Save the property and return
+    let propertySave = undefined;
+    try {
+      propertySave = await this.propRepository.save(property);
+    } catch (error) {
+      throw new RequestTimeoutException('Unable to connect to server', {
+        description: 'connection timeout',
+      });
+    }
+    if (!propertySave)
+      throw new BadRequestException('Not your updated the property!');
+    return propertySave;
   }
 }

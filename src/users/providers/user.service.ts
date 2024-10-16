@@ -1,9 +1,16 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  HttpException,
+  HttpStatus,
+  Injectable,
+  RequestTimeoutException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PropertyService } from 'src/property/property.service';
 import { Repository } from 'typeorm';
 import { User } from '../user.entity';
 import { CreateUserDto } from '../dto/createUser.dto';
+import { error } from 'console';
 
 @Injectable()
 export class UserService {
@@ -13,18 +20,60 @@ export class UserService {
   ) {}
 
   public async createUser(createUserDto: CreateUserDto) {
-    const existingUser = await this.userRepository.findOne({
-      where: {
-        email: createUserDto.email,
-      },
-    });
+    let existingUser = undefined;
+
+    try {
+      existingUser = await this.userRepository.findOne({
+        where: {
+          email: createUserDto.email,
+        },
+      });
+    } catch (error) {
+      throw new RequestTimeoutException(
+        'Unable to process your request at the moment please try later',
+        {
+          description: 'Error connecting to the database',
+        },
+      );
+    }
+    if (existingUser)
+      throw new BadRequestException(
+        'The user already exists, please check your email',
+      );
 
     let newUser = this.userRepository.create(createUserDto);
-    newUser = await this.userRepository.save(newUser);
+    try {
+      newUser = await this.userRepository.save(newUser);
+    } catch (error) {
+      throw new RequestTimeoutException(
+        'unable to process your request at the moment!',
+      );
+    }
     return newUser;
   }
 
   public async findUserById(id: number) {
-    return await this.userRepository.findOneBy({ id });
+    let user = undefined;
+    try {
+      user = await this.userRepository.findOneBy({ id });
+    } catch (error) {
+      throw new RequestTimeoutException('Unable to proccess your request', {
+        description: 'problem connecting database',
+      });
+    }
+    if (!user) throw new BadRequestException('The user id does not exist!');
+    return user;
+  }
+
+  public findAll() {
+    throw new HttpException(
+      {
+        status: HttpStatus.MOVED_PERMANENTLY,
+        error: 'The API endpoint dies not exist',
+        fileName: 'user.service.ts',
+        lineNumber: 88,
+      },
+      HttpStatus.MOVED_PERMANENTLY,
+    );
   }
 }
