@@ -7,16 +7,19 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PropertyService } from 'src/property/property.service';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { User } from '../user.entity';
 import { CreateUserDto } from '../dto/createUser.dto';
 import { error } from 'console';
+import { UsersCreateManyProvider } from './users-create-many.provider';
+import { CreateManyUserDto } from '../dto/create-many-user.dto';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
+    private readonly usersCreateManyProvider: UsersCreateManyProvider,
   ) {}
 
   public async createUser(createUserDto: CreateUserDto) {
@@ -75,5 +78,9 @@ export class UserService {
       },
       HttpStatus.MOVED_PERMANENTLY,
     );
+  }
+
+  public async createMany(createManyUserDto: CreateManyUserDto) {
+    return await this.usersCreateManyProvider.createMany(createManyUserDto);
   }
 }
