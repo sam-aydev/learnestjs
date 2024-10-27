@@ -13,6 +13,7 @@ import { MetaOption } from 'src/metaoptions/meta-option.entity';
 import { TagsService } from 'src/tags/tags.service';
 import { PatchPropertyDto } from './dto/patchProperty.dto';
 import { ConfigService } from '@nestjs/config';
+import { GetPropertyDto } from './dto/get-property.dto';
 
 @Injectable()
 export class PropertyService {
@@ -43,10 +44,16 @@ export class PropertyService {
     return await this.propRepository.save(property);
   }
 
-  public async findAll() {
+  public async findAll(getPropertyDto: GetPropertyDto) {
     const enviroment = this.configService.get<string>('S3_BUCKET');
     console.log(enviroment);
-    return await this.propRepository.find();
+    return await this.propRepository.find({
+      relations: {
+        metaOptions: true,
+      },
+      skip: (getPropertyDto.page - 1) * getPropertyDto.limit,
+      take: getPropertyDto.limit,
+    });
   }
 
   public async delete(id: number) {

@@ -16,14 +16,15 @@ import { CreatePropertyDto } from './dto/createProperty.dto';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { PropertyService } from './property.service';
 import { PatchPropertyDto } from './dto/patchProperty.dto';
+import { GetPropertyDto } from './dto/get-property.dto';
 
 @Controller('property')
 @ApiTags('property')
 export class PropertyController {
   constructor(private readonly propertyService: PropertyService) {}
   @Get()
-  public findAll() {
-    return this.propertyService.findAll();
+  public findAll(getPropertyDto: GetPropertyDto) {
+    return this.propertyService.findAll(getPropertyDto);
   }
 
   @ApiResponse({
@@ -47,12 +48,12 @@ export class PropertyController {
     return this.propertyService.update(updatePropertyDto);
   }
 
-  // @Get(':id')
-  // findOne(
-  //   @Param('id', ParseIntPipe) id: string,
-  //   @Query('sort', ParseBoolPipe) sort,
-  // ) {
-  //   console.log(typeof sort);
-  //   return `${id} - ${sort}`;
-  // }
+  @Get('/:id')
+  findOne(
+    @Param('id', ParseIntPipe) id: string,
+    @Query() getPropertyDto: GetPropertyDto,
+  ) {
+    console.log(getPropertyDto);
+    return getPropertyDto;
+  }
 }
