@@ -6,6 +6,7 @@ import { Property } from './property.entity';
 import { MetaOption } from 'src/metaoptions/meta-option.entity';
 import { UsersModule } from 'src/users/users.module';
 import { TagsModule } from 'src/tags/tags.module';
+import { PaginationModule } from 'src/common/pagination/pagination.module';
 
 @Module({
   providers: [PropertyService],
@@ -14,6 +15,7 @@ import { TagsModule } from 'src/tags/tags.module';
   imports: [
     forwardRef(() => UsersModule),
     TagsModule,
+    PaginationModule,
     TypeOrmModule.forFeature([Property, MetaOption]),
   ],
 })

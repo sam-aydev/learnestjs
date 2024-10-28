@@ -14,6 +14,8 @@ import { TagsService } from 'src/tags/tags.service';
 import { PatchPropertyDto } from './dto/patchProperty.dto';
 import { ConfigService } from '@nestjs/config';
 import { GetPropertyDto } from './dto/get-property.dto';
+import { PaginationProvider } from 'src/common/pagination/providers/pagination.provider';
+import { Paginated } from 'src/common/pagination/interfaces/paginated.interface';
 
 @Injectable()
 export class PropertyService {
@@ -29,6 +31,8 @@ export class PropertyService {
     public metaOptionRepo: Repository<MetaOption>,
 
     public readonly configService: ConfigService,
+
+    private readonly paginationProvider: PaginationProvider,
   ) {}
 
   public async create(@Body() createPropDto: CreatePropertyDto) {
@@ -44,16 +48,20 @@ export class PropertyService {
     return await this.propRepository.save(property);
   }
 
-  public async findAll(getPropertyDto: GetPropertyDto) {
+  public async findAll(
+    getPropertyDto: GetPropertyDto,
+  ): Promise<Paginated<Property>> {
     const enviroment = this.configService.get<string>('S3_BUCKET');
     console.log(enviroment);
-    return await this.propRepository.find({
-      relations: {
-        metaOptions: true,
+    let properties = await this.paginationProvider.paginateQuery(
+      {
+        limit: getPropertyDto.limit,
+        page: getPropertyDto.page,
       },
-      skip: (getPropertyDto.page - 1) * getPropertyDto.limit,
-      take: getPropertyDto.limit,
-    });
+      this.propRepository,
+    );
+
+    return properties;
   }
 
   public async delete(id: number) {
