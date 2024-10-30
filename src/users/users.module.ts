@@ -7,6 +7,7 @@ import { User } from './user.entity';
 import { UsersCreateManyProvider } from './providers/users-create-many.provider';
 import { CreateUserProvider } from './providers/create-user.provider';
 import { AuthModule } from 'src/auth/auth.module';
+import { HashingProvider } from 'src/auth/providers/hashing.provider/hashing.provider';
 
 @Module({
   controllers: [UsersController],
@@ -14,6 +15,7 @@ import { AuthModule } from 'src/auth/auth.module';
   imports: [
     forwardRef(() => PropertyModule),
     forwardRef(() => AuthModule),
+
     TypeOrmModule.forFeature([User]),
   ],
   exports: [UserService],

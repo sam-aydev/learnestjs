@@ -13,6 +13,6 @@ import { BcryptProvider } from './providers/bcrypt.provider/bcrypt.provider';
       useClass: BcryptProvider,
     },
   ],
-  exports: [AuthService],
+  exports: [AuthService, HashingProvider],
 })
 export class AuthModule {}
