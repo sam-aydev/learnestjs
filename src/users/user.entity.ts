@@ -29,8 +29,8 @@ export class User {
 
   @Column({
     type: 'varchar',
-    length: 12,
-    nullable: false,
+    length: 70,
+    nullable: true,
   })
   password: string;
 

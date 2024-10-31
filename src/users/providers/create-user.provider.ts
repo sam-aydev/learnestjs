@@ -37,16 +37,19 @@ export class CreateUserProvider {
         },
       );
     }
-    if (existingUser)
+    if (existingUser) {
+      console.log(existingUser);
       throw new BadRequestException(
         'The user already exists, please check your email',
       );
+    }
 
     let newUser = this.userRepository.create({
       ...createUserDto,
       password: await this.hashingProvider.hashPassword(createUserDto.password),
     });
     try {
+      console.log(newUser);
       newUser = await this.userRepository.save(newUser);
     } catch (error) {
       throw new RequestTimeoutException(

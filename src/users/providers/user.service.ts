@@ -14,6 +14,7 @@ import { error } from 'console';
 import { UsersCreateManyProvider } from './users-create-many.provider';
 import { CreateManyUserDto } from '../dto/create-many-user.dto';
 import { CreateUserProvider } from './create-user.provider';
+import { FindOneUserByEmailProvider } from './find-one-user-by-email.provider';
 
 @Injectable()
 export class UserService {
@@ -22,6 +23,7 @@ export class UserService {
     private userRepository: Repository<User>,
     private readonly usersCreateManyProvider: UsersCreateManyProvider,
     private readonly createUserProvider: CreateUserProvider,
+    private readonly findOneUserByEmailProvider: FindOneUserByEmailProvider,
   ) {}
 
   public async createUser(createUserDto: CreateUserDto) {
@@ -41,6 +43,9 @@ export class UserService {
     return user;
   }
 
+  public async findUserByEmail(email: string) {
+    return await this.findOneUserByEmailProvider.findOneByEmail(email);
+  }
   public findAll() {
     throw new HttpException(
       {
