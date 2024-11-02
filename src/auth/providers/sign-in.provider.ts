@@ -8,6 +8,10 @@ import {
 import { UserService } from 'src/users/providers/user.service';
 import { SignInDto } from '../dto/signIn.dto';
 import { HashingProvider } from './hashing.provider/hashing.provider';
+import { JwtService } from '@nestjs/jwt';
+import { ConfigType } from '@nestjs/config';
+import jwtConfig from '../config/jwt.config';
+import { ActiveUserData } from '../interfaces/active-user-data.interfaces';
 
 @Injectable()
 export class SignInProvider {
@@ -16,6 +20,11 @@ export class SignInProvider {
     private readonly usersService: UserService,
 
     private readonly hashingProvider: HashingProvider,
+
+    private readonly jwtService: JwtService,
+
+    @Inject(jwtConfig.KEY)
+    private readonly jwtConfiguration: ConfigType<typeof jwtConfig>,
   ) {}
 
   public async SignIn(signInDto: SignInDto) {
@@ -32,8 +41,8 @@ export class SignInProvider {
 
     try {
       isEqual = await this.hashingProvider.comparePassword(
-        user.password,
         signInDto.password,
+        user.password,
       );
     } catch (error) {
       throw new RequestTimeoutException(error, {
@@ -46,6 +55,18 @@ export class SignInProvider {
     }
 
     // Send confirmation
-    return true;
+    const accessToken = await this.jwtService.signAsync(
+      {
+        sub: user.id,
+        email: user.email,
+      } as ActiveUserData,
+      {
+        audience: this.jwtConfiguration.audience,
+        issuer: this.jwtConfiguration.issuer,
+        secret: this.jwtConfiguration.secret,
+        expiresIn: this.jwtConfiguration.accessTokenTtl,
+      },
+    );
+    return { accessToken };
   }
 }

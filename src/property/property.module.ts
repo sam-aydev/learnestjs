@@ -7,9 +7,10 @@ import { MetaOption } from 'src/metaoptions/meta-option.entity';
 import { UsersModule } from 'src/users/users.module';
 import { TagsModule } from 'src/tags/tags.module';
 import { PaginationModule } from 'src/common/pagination/pagination.module';
+import { CreatePostProvider } from './providers/create-post.provider';
 
 @Module({
-  providers: [PropertyService],
+  providers: [PropertyService, CreatePostProvider],
   controllers: [PropertyController],
   exports: [PropertyService],
   imports: [

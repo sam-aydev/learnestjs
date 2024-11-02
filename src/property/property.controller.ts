@@ -10,6 +10,7 @@ import {
   Patch,
   Post,
   Query,
+  Req,
   ValidationPipe,
 } from '@nestjs/common';
 import { CreatePropertyDto } from './dto/createProperty.dto';
@@ -17,6 +18,7 @@ import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { PropertyService } from './property.service';
 import { PatchPropertyDto } from './dto/patchProperty.dto';
 import { GetPropertyDto } from './dto/get-property.dto';
+import { REQUEST_USER_KEY } from 'src/auth/constants/auth.constants';
 
 @Controller('property')
 @ApiTags('property')
@@ -33,8 +35,11 @@ export class PropertyController {
   })
   @Post()
   @HttpCode(202)
-  public createProperty(@Body() createPropertyDto: CreatePropertyDto) {
-    return this.propertyService.create(createPropertyDto);
+  public createProperty(
+    @Req() request /** @Body()  createPropertyDto: CreatePropertyDto */,
+  ) {
+    console.log(request[REQUEST_USER_KEY]);
+    // return this.propertyService.create(createPropertyDto);
   }
 
   @Delete(':id')
