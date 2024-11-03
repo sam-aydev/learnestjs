@@ -16,6 +16,9 @@ import { ConfigService } from '@nestjs/config';
 import { GetPropertyDto } from './dto/get-property.dto';
 import { PaginationProvider } from 'src/common/pagination/providers/pagination.provider';
 import { Paginated } from 'src/common/pagination/interfaces/paginated.interface';
+import { CreatePostProvider } from './providers/create-post.provider';
+import { ActiveUser } from 'src/auth/decorator/active-user-data.decorator';
+import { ActiveUserData } from 'src/auth/interfaces/active-user-data.interfaces';
 
 @Injectable()
 export class PropertyService {
@@ -33,19 +36,15 @@ export class PropertyService {
     public readonly configService: ConfigService,
 
     private readonly paginationProvider: PaginationProvider,
+
+    private readonly createPostProvide: CreatePostProvider,
   ) {}
 
-  public async create(@Body() createPropDto: CreatePropertyDto) {
-    let author = await this.userService.findUserById(createPropDto.authorId);
-
-    let tags = await this.tagsService.findTags(createPropDto.tags);
-    let property = this.propRepository.create({
-      ...createPropDto,
-      author,
-      tags,
-    });
-
-    return await this.propRepository.save(property);
+  public async create(
+    @Body() createPropDto: CreatePropertyDto,
+    @ActiveUser() user: ActiveUserData,
+  ) {
+    return await this.createPostProvide.create(createPropDto, user);
   }
 
   public async findAll(

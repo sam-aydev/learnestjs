@@ -53,11 +53,11 @@ export class CreatePropertyDto {
   @Type(() => MetaOptionDto)
   metaOptions: MetaOptionDto | null;
 
-  @ApiProperty({
-    type: 'integer',
-    required: true,
-  })
-  @IsInt()
-  @IsNotEmpty()
-  authorId: number;
+  // @ApiProperty({
+  //   type: 'integer',
+  //   required: true,
+  // })
+  // @IsInt()
+  // @IsNotEmpty()
+  // authorId: number;
 }
