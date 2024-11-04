@@ -32,7 +32,13 @@ export class User {
     length: 70,
     nullable: true,
   })
-  password: string;
+  password?: string;
+
+  @Column({
+    type: 'varchar',
+    nullable: true,
+  })
+  googleId?: string;
 
   @OneToMany(() => Property, (property) => property.author)
   property: Property[];

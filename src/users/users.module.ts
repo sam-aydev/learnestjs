@@ -14,6 +14,8 @@ import { AccessTokenGuard } from 'src/auth/guards/access-token/access-token.guar
 import { ConfigModule } from '@nestjs/config';
 import jwtConfig from 'src/auth/config/jwt.config';
 import { JwtModule } from '@nestjs/jwt';
+import { FindOneBgGoogleIdProvider } from './providers/find-one-bg-google-id.provider';
+import { CreateGoogleUserProvider } from './providers/create-google-user.provider';
 
 @Module({
   controllers: [UsersController],
@@ -22,6 +24,8 @@ import { JwtModule } from '@nestjs/jwt';
     UsersCreateManyProvider,
     CreateUserProvider,
     FindOneUserByEmailProvider,
+    FindOneBgGoogleIdProvider,
+    CreateGoogleUserProvider,
   ],
   imports: [
     forwardRef(() => PropertyModule),
