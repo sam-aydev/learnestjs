@@ -1,10 +1,12 @@
 import {
   Body,
+  ClassSerializerInterceptor,
   Controller,
   Get,
   Post,
   SetMetadata,
   UseGuards,
+  UseInterceptors,
   ValidationPipe,
 } from '@nestjs/common';
 import { UserService } from './providers/user.service';
@@ -30,6 +32,7 @@ export class UsersController {
   // @UseGuards(AccessTokenGuard)
   @Post()
   @Auth(AuthType.Bearer)
+  @UseInterceptors(ClassSerializerInterceptor)
   public createUsers(@Body() createUserDto: CreateUserDto) {
     return this.userService.createUser(createUserDto);
   }

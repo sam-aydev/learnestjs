@@ -5,4 +5,5 @@ export const appConfig = () => ({
     port: parseInt(process.env.DATABSE_PORT) || 5432,
     autoLoadEntities: true,
   },
+  apiVersion: process.env.API_VERSION,
 });
